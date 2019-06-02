@@ -1,0 +1,10 @@
+div {
+    background: #c5c5c5;
+    padding: 5px;
+}
+
+.string { color: green; }
+.number { color: blue; }
+.boolean { color: purple; }
+.null { color: magenta; }
+.key { color: red; }
