@@ -57,8 +57,7 @@ function updateScore(match_id) {
             return;
         }
         response.json().then(jsonData => {
-            console.log("foo");
-            console.log(jsonData);
+            // console.log(jsonData);
             document.getElementById('data').innerHTML = getFormatted(getSanitizedJson(jsonData), 2);
         });
     }).catch(function(err) {
