@@ -11,13 +11,17 @@ const scorecard_url = "http://mapps.cricbuzz.com/cbzios/match/{match_id}/scoreca
 app.use('/views', express.static(__dirname + '/views'));
 
 app.get("/", (req, res) => {
+  console.log("GET /");
   res.sendFile(path.join(__dirname,'views/index.html'));
 });
 
 app.get("/score-data/:match_id", (req, res) => {
+  console.log("GET /score-data/" + req.params.match_id);
   _getResponse(`http://mapps.cricbuzz.com/cbzios/match/${req.params.match_id}/scorecard.json`)
   .then(data => {
     res.send(data);
+  }).catch(_res => {
+    res.send(_res);
   });
 });
 
@@ -27,18 +31,20 @@ app.listen(port, () =>
 
 function _getResponse(url) {
   return new Promise(function(resolve, reject){
-    request.get(url, function(err,res,body) {
+    request.get(url, function(err,res) {
       if(err) {
-        reject(err);
-      }
-      if(res == undefined) {
-        reject("undefined res");
+        err.success = false;
+        return reject(err);
       }
       if(res.statusCode == 200 ) {
         data = JSON.parse(res.body);
-        resolve(data);
+        data.success = true;
+        return resolve(data);
       }else{
-        reject("error");
+        return reject({
+          success: false,
+          message: "unknown"
+        });
       }
     });
   });

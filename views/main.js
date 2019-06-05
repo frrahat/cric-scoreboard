@@ -1,3 +1,7 @@
+var is_LIVE = false;
+var data_element = document.getElementById('data');
+var is_live_status_element = document.getElementById("is-live-status");
+
 function getFormatted(jsonObject,level) {
 	var returnString = '';
 	for (var key in jsonObject) {
@@ -52,21 +56,38 @@ function getSanitizedJson(jsonObject) {
 function updateScore(match_id) {
     fetch('/score-data/' + match_id)
     .then(response => {
-        if(response.status != 200) {
-            console.log(`Error. Status code : ${response.status}`);
-            return;
-        }
+        
         response.json().then(jsonData => {
             // console.log(jsonData);
-            document.getElementById('data').innerHTML = getFormatted(getSanitizedJson(jsonData), 2);
+            if (jsonData.success) {
+                data_element.innerHTML = getFormatted(getSanitizedJson(jsonData), 2);
+                setLiveStatus(true);
+            } else {
+                setLiveStatus(false);
+            }
         });
     }).catch(function(err) {
-        console.log('Fetch Error :-S', err);
+        console.log('Server stopped');
+        setLiveStatus(false);
     });
 }
 
 function start(match_id, interval) {
     setInterval(updateScore, interval, match_id);
+}
+
+function setLiveStatus(new_is_live) {
+    let prev_is_live = is_LIVE;
+    if(new_is_live != prev_is_live) {
+        if(new_is_live) {
+            is_live_status_element.classList.remove("led-red");
+            is_live_status_element.classList.add("led-green");
+        } else {
+            is_live_status_element.classList.remove("led-green");
+            is_live_status_element.classList.add("led-red");
+        }
+    }
+    is_LIVE = new_is_live;
 }
 
 start(20241, 5000);

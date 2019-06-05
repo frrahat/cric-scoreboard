@@ -1,9 +1,46 @@
 div {
     padding: 5px;
 }
-
 .string { color: green; }
 .number { color: blue; }
 .boolean { color: purple; }
 .null { color: magenta; }
 .key { color: red; }
+
+.input-block {
+    position: relative;
+    background-color: red;
+}
+
+.toggler-button {
+
+}
+
+.match-id-input {
+
+}
+
+.led-red {
+    margin: 0 auto;
+    width: 24px;
+    height: 24px;
+    background-color: #F00;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
+}
+
+.led-green {
+    margin: 0 auto;
+    width: 24px;
+    height: 24px;
+    background-color: #0F0;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #0F0 0 2px 12px;
+    animation: blinkGreen 1s infinite;
+}
+
+@keyframes blinkGreen {
+    from { background-color: #0F0; }
+    50% { background-color: #CF0; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 0; }
+    to { background-color: #0F0; }
+}
