@@ -8,18 +8,50 @@ const port = 8000;
 const live_matches_url = "http://mapps.cricbuzz.com/cbzios/match/livematches"
 const scorecard_url = "http://mapps.cricbuzz.com/cbzios/match/{match_id}/scorecard.json"
 
+var MatchId = null; 
+
 app.use('/views', express.static(__dirname + '/views'));
 
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   console.log("GET /");
   res.sendFile(path.join(__dirname,'views/index.html'));
+});
+
+app.get("/match-list", (_, res) => {
+  console.log("GET /match-list");
+  _getResponse(live_matches_url)
+  .then(data => {
+    res.send(getSanitizedMatchList(data));
+  }).catch(_res => {
+    res.send(_res);
+  });
+});
+
+app.get("/subscribe/:match_id", (req, res) => {
+  console.log("GET /subscribe/" + req.params.match_id);
+  MatchId = req.params.match_id;
+  res.send("");
+});
+
+app.get("/score-update", (_, res) => {
+  console.log("GET /score-update");
+  if (!MatchId) {
+    res.send({success: false});
+  } else {
+    _getResponse(`http://mapps.cricbuzz.com/cbzios/match/${MatchId}/scorecard.json`)
+    .then(data => {
+      res.send(getSanitizedScore(data));
+    }).catch(_res => {
+      res.send(_res);
+    });
+  }
 });
 
 app.get("/score-data/:match_id", (req, res) => {
   console.log("GET /score-data/" + req.params.match_id);
   _getResponse(`http://mapps.cricbuzz.com/cbzios/match/${req.params.match_id}/scorecard.json`)
   .then(data => {
-    res.send(data);
+    res.send(getSanitizedScore(data));
   }).catch(_res => {
     res.send(_res);
   });
@@ -28,6 +60,48 @@ app.get("/score-data/:match_id", (req, res) => {
 app.listen(port, () =>
   console.log(`listening on port ${port}!`),
 );
+
+function getSanitizedMatchList(data) {
+  let result = {
+    matches: [],
+    success: true
+  };
+  data.matches.forEach(match => {
+    let match_id = match.match_id;
+    let team1 = match.team1.name;
+    let team2 = match.team2.name;
+    result.matches.push({
+      match_id: match_id,
+      title: team1 + " vs " + team2
+    });
+  });
+  return result;
+}
+
+function getSanitizedScore(data) {
+  let result = {
+    matchData: Object(),
+    success: true 
+  };
+  result.matchData.Status = data.status;
+  result.matchData.Innings = [
+      {
+          team: data.Innings[0].bat_team_name,
+          innings: data.Innings[0].innings_id,
+          score: data.Innings[0].score,
+          wicket: data.Innings[0].wkts,
+          overs: data.Innings[0].ovr
+      },
+      {
+          team: data.Innings[1].bat_team_name,
+          innings: data.Innings[1].innings_id,
+          score: data.Innings[1].score,
+          wicket: data.Innings[1].wkts,
+          overs: data.Innings[1].ovr
+      }
+  ];
+  return result;
+}
 
 function _getResponse(url) {
   return new Promise(function(resolve, reject){

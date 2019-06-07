@@ -12,12 +12,42 @@ div {
     background-color: red;
 }
 
-.toggler-button {
-
+.btn-match-select {
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    outline: none;
 }
 
-.match-id-input {
+.btn-match-select:hover {
+    background-color: #000;
+    color: #fff;
+    border: #F00 1px solid;
+}
 
+.match-list-modal {
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    display: none;
+}
+
+.match-list-item {
+    padding: 10px;
+    background-color: #fafafa;
+    color: #000;
+}
+
+.match-list-item:nth-child(odd) {
+    background-color: #c5c5c5;
+}
+
+.match-list-item:hover {
+    background-color: #080808;
+    color: #fff;
 }
 
 .led-red {

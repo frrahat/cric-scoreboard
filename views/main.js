@@ -1,6 +1,78 @@
 var is_LIVE = false;
-var data_element = document.getElementById('data');
+var data_element = document.getElementById("data");
 var is_live_status_element = document.getElementById("is-live-status");
+var btn_match_select = document.getElementById("btn-match-select");
+var match_list_modal = document.getElementById("match-list-modal");
+
+btn_match_select.addEventListener("click", () => {
+    btn_match_select.innerText = "Loading";
+    setMatchListModal()
+    .then(() => {
+        openMatchListModal();
+        btn_match_select.innerText = "Selecting Match";
+    }).catch(() => {
+        btn_match_select.innerText = "Select Match";
+        alert("Failed to fetch live match list");
+    });
+});
+
+match_list_modal.addEventListener("click", (e) => {
+    if(e.target.tagName === "LI") {
+        setMatchId(e.target.id)
+        .then(() => {
+            btn_match_select.innerText = e.target.innerText;
+        }).catch(() => {
+            btn_match_select.innerText = "Select Match";
+            alert("Failed to select match");
+        });
+        hideMatchListModal();
+    }
+});
+
+function setMatchListModal() {
+    return new Promise((resolve, reject) => {
+        fetch('/match-list')
+        .then(response => {
+            response.json().then(jsonData => {
+                // console.log(jsonData);
+                if (jsonData.success) {
+                    let listHtml = ""
+                    jsonData.matches.forEach(match => {
+                        listHtml += `<li class="match-list-item" id="${match.match_id}">${match.title}</li>`;
+                    });
+                    match_list_modal.innerHTML = listHtml;
+                    resolve();
+                } else {
+                    console.log("Failed to fetch matchlist");
+                    reject();
+                }
+            });
+        }).catch(function() {
+            console.log('Server stopped');
+            reject();
+        });
+    });
+}
+
+function openMatchListModal() {
+    match_list_modal.setAttribute("style", "display: block");
+}
+
+function hideMatchListModal() {
+    match_list_modal.setAttribute("style", "display: none");
+}
+
+function setMatchId(match_id) {
+    return new Promise((resolve, reject) => {
+        fetch('/subscribe/' + match_id)
+        .then(() => {
+            resolve();
+        }).catch(function() {
+            console.log('Server stopped');
+            reject();
+        });
+    });
+}
 
 function getFormatted(jsonObject,level) {
 	var returnString = '';
@@ -31,42 +103,19 @@ function getFormatted(jsonObject,level) {
 	return returnString;
 }
 
-function getSanitizedJson(jsonObject) {
-    result = Object();
-    result["Status"] = jsonObject.status; 
-    result["Innings"] = [
-        {
-            "team": jsonObject.Innings[0].bat_team_name,
-            "innings": jsonObject.Innings[0].innings_id,
-            "score": jsonObject.Innings[0].score,
-            "wicket": jsonObject.Innings[0].wkts,
-            "overs": jsonObject.Innings[0].ovr
-        },
-        {
-            "team": jsonObject.Innings[1].bat_team_name,
-            "innings": jsonObject.Innings[1].innings_id,
-            "score": jsonObject.Innings[1].score,
-            "wicket": jsonObject.Innings[1].wkts,
-            "overs": jsonObject.Innings[1].ovr
-        }
-    ];
-    return result;
-}
-
 function updateScore(match_id) {
-    fetch('/score-data/' + match_id)
+    fetch('/score-update')
     .then(response => {
-        
         response.json().then(jsonData => {
             // console.log(jsonData);
             if (jsonData.success) {
-                data_element.innerHTML = getFormatted(getSanitizedJson(jsonData), 2);
+                data_element.innerHTML = getFormatted(jsonData.matchData, 2);
                 setLiveStatus(true);
             } else {
                 setLiveStatus(false);
             }
         });
-    }).catch(function(err) {
+    }).catch(function() {
         console.log('Server stopped');
         setLiveStatus(false);
     });
