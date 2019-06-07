@@ -11,6 +11,8 @@ var noti_checks = {
     nW: true, n6: true, n4:true
 }
 
+var updateScoreTimeout;
+
 btn_match_select.addEventListener("click", () => {
     btn_match_select.innerText = "Loading";
     setMatchListModal()
@@ -28,6 +30,8 @@ match_list_modal.addEventListener("click", (e) => {
         setMatchId(e.target.id)
         .then(() => {
             btn_match_select.innerText = e.target.innerText;
+            clearTimeout(updateScoreTimeout);
+            updateScore();
         }).catch(() => {
             btn_match_select.innerText = "Select Match";
             alert("Failed to select match");
@@ -150,7 +154,7 @@ function updateScore() {
         setLiveStatus(false);
     });
 
-    setTimeout(updateScore, 30000);
+    updateScoreTimeout = setTimeout(updateScore, 30000);
 }
 
 function setLiveStatus(new_is_live) {
