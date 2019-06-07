@@ -6,6 +6,11 @@ var match_list_modal = document.getElementById("match-list-modal");
 var serviceWorkerRegistration = null;
 var prev_score_data = null;
 
+var noti_check_group_element = document.getElementById("noti-check");
+var noti_checks = {
+    nW: true, n6: true, n4:true
+}
+
 btn_match_select.addEventListener("click", () => {
     btn_match_select.innerText = "Loading";
     setMatchListModal()
@@ -28,6 +33,27 @@ match_list_modal.addEventListener("click", (e) => {
             alert("Failed to select match");
         });
         hideMatchListModal();
+    }
+});
+
+noti_check_group_element.addEventListener("click", (e) => {
+    if(e.target.tagName === "SPAN") {
+        let target_id = e.target.id;
+        let target_element = document.getElementById(target_id);
+        for(let key in noti_checks) {
+            if(noti_checks.hasOwnProperty(key)) {
+                if(target_id.endsWith(key.substr(key.length-1))) {
+                    // console.log(target_id, "here");
+                    if(noti_checks[key]) {
+                        target_element.classList.remove("noti-check-item-selected");
+                        noti_checks[key] = false;
+                    } else {
+                        target_element.classList.add("noti-check-item-selected");
+                        noti_checks[key] = true;
+                    }
+                }
+            }
+        }
     }
 });
 
@@ -123,6 +149,8 @@ function updateScore() {
         console.log('Server stopped');
         setLiveStatus(false);
     });
+
+    setTimeout(updateScore, 30000);
 }
 
 function setLiveStatus(new_is_live) {
@@ -194,17 +222,17 @@ function processForNotification(latest_score_data) {
     let shortScore = _getScoreInShort(latest_score_data);
     // console.log(shortScore);
     // scoreChange = {runs: 6, wickets: 2};
-    if(scoreChange.wickets >= 1) {
+    if(noti_checks["nW"] && scoreChange.wickets >= 1) {
         _showNotification("Gone!", {
             body: shortScore,
             icon: "/static/images/W.png" 
         });
-    } else if(scoreChange.runs >= 6) {
+    } else if(noti_checks["n6"] && scoreChange.runs >= 6) {
         _showNotification("SIX!", {
             body: shortScore,
             icon: "/static/images/6.png" 
         });
-    } else if(scoreChange.runs >= 4) {
+    } else if(noti_checks["n4"] && scoreChange.runs >= 4 && scoreChange.runs < 6) {
         _showNotification("FOUR!", {
             body: shortScore,
             icon: "/static/images/4.jpg" 
@@ -217,7 +245,7 @@ function processForNotification(latest_score_data) {
 
 function main() {
     setServiceWorkerRegistration();
-    setInterval(updateScore, 5000);
+    updateScore();
 }
 
 main()

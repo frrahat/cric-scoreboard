@@ -31,6 +31,41 @@ div {
     border: #F00 1px solid;
 }
 
+.noti-check {
+    float: left;
+    border: #000 1px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-left: 30px;
+}
+
+.noti-image {
+    float: left;
+    width: 25px;
+}
+
+.noti-check-item {
+    float: left;
+    width: 20px;
+    padding: 2px;
+    text-align: center;
+    border: #000 1px solid;
+    border-radius: 25px;
+    margin-left: 5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.noti-check-item:hover {
+    color: #fff;
+    background-color: #000;
+}
+
+.noti-check-item-selected {
+    color: #fff !important;
+    background-color: #00f !important;
+}
+
 .match-list-modal {
     position: absolute;
     z-index: 1000;

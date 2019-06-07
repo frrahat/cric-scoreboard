@@ -73,7 +73,7 @@ function getSanitizedMatchList(data) {
     let team2 = match.team2.name;
     result.matches.push({
       match_id: match_id,
-      title: team1 + " vs " + team2
+      title: `${team1} vs ${team2} (${match.header.state_title})` 
     });
   });
   return result;
