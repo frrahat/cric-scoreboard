@@ -11,6 +11,7 @@ const scorecard_url = "http://mapps.cricbuzz.com/cbzios/match/{match_id}/scoreca
 var MatchId = null; 
 
 app.use('/views', express.static(__dirname + '/views'));
+app.use('/static', express.static(__dirname + '/static'));
 
 app.get("/", (_, res) => {
   console.log("GET /");
@@ -83,23 +84,20 @@ function getSanitizedScore(data) {
     matchData: Object(),
     success: true 
   };
-  result.matchData.Status = data.status;
-  result.matchData.Innings = [
-      {
-          team: data.Innings[0].bat_team_name,
-          innings: data.Innings[0].innings_id,
-          score: data.Innings[0].score,
-          wicket: data.Innings[0].wkts,
-          overs: data.Innings[0].ovr
-      },
-      {
-          team: data.Innings[1].bat_team_name,
-          innings: data.Innings[1].innings_id,
-          score: data.Innings[1].score,
-          wicket: data.Innings[1].wkts,
-          overs: data.Innings[1].ovr
-      }
-  ];
+  // console.log(data);
+  result.matchData.status = data.status;
+  result.matchData.state = data.state;
+  result.matchData.innings = [];
+  data.Innings.forEach(innings => {
+    result.matchData.innings.push({
+      team: innings.bat_team_name,
+      innings_id: innings.innings_id,
+      score: innings.score,
+      wicket: innings.wkts,
+      overs: innings.ovr
+    });
+  });
+  // console.log(result);
   return result;
 }
 

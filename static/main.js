@@ -3,6 +3,8 @@ var data_element = document.getElementById("data");
 var is_live_status_element = document.getElementById("is-live-status");
 var btn_match_select = document.getElementById("btn-match-select");
 var match_list_modal = document.getElementById("match-list-modal");
+var serviceWorkerRegistration = null;
+var prev_score_data = null;
 
 btn_match_select.addEventListener("click", () => {
     btn_match_select.innerText = "Loading";
@@ -103,7 +105,7 @@ function getFormatted(jsonObject,level) {
 	return returnString;
 }
 
-function updateScore(match_id) {
+function updateScore() {
     fetch('/score-update')
     .then(response => {
         response.json().then(jsonData => {
@@ -111,6 +113,8 @@ function updateScore(match_id) {
             if (jsonData.success) {
                 data_element.innerHTML = getFormatted(jsonData.matchData, 2);
                 setLiveStatus(true);
+                processForNotification(jsonData.matchData);
+                prev_score_data = jsonData.matchData;
             } else {
                 setLiveStatus(false);
             }
@@ -119,10 +123,6 @@ function updateScore(match_id) {
         console.log('Server stopped');
         setLiveStatus(false);
     });
-}
-
-function start(match_id, interval) {
-    setInterval(updateScore, interval, match_id);
 }
 
 function setLiveStatus(new_is_live) {
@@ -139,4 +139,85 @@ function setLiveStatus(new_is_live) {
     is_LIVE = new_is_live;
 }
 
-start(20241, 5000);
+/* Notification Handling
+===================================================================*/
+
+function setServiceWorkerRegistration() {
+    if(!('Notification' in window && 'ServiceWorkerRegistration' in window)) {
+        console.log("Persistent Notification API not supported!");
+        return;
+    }
+    
+    Notification.requestPermission(result => {
+        console.log("Notification Permission :", result);
+        navigator.serviceWorker.register("/static/service.js")
+        .then(registration => {
+            if(registration) {
+                serviceWorkerRegistration = registration;
+            } else {
+                console.log("Could not get service worker registration");
+            }
+        }).catch(err => {
+            console.log("Service Worker Registartion Error :", err);
+        });
+    });
+}
+
+function _showNotification(title, options) {
+    if(serviceWorkerRegistration) {
+        serviceWorkerRegistration.showNotification(title, options);
+    }
+}
+
+function _getScoreInShort(latest_score_data) {
+    let latest_innings = latest_score_data.innings[0];
+    if(!latest_innings) return "";
+    return `${latest_innings.team}: ${latest_innings.score}/${latest_innings.wicket} (${latest_innings.overs})`
+}
+
+function _getScoreChange(latest_score_data) {
+    let result = {runs: 0, wickets: 0}
+    if(!prev_score_data) return result;
+
+    let latest = latest_score_data.innings;
+    let prev = prev_score_data.innings;
+    if(prev.length == 0 || prev.length != latest.length) return result;
+    
+    return {
+        runs: latest[0].score - prev[0].score,
+        wickets: latest[0].wicket - prev[0].wicket
+    }
+}
+
+function processForNotification(latest_score_data) {
+    let scoreChange = _getScoreChange(latest_score_data);
+    let shortScore = _getScoreInShort(latest_score_data);
+    // console.log(shortScore);
+    // scoreChange = {runs: 6, wickets: 2};
+    if(scoreChange.wickets >= 1) {
+        _showNotification("Gone!", {
+            body: shortScore,
+            icon: "/static/images/W.png" 
+        });
+    } else if(scoreChange.runs >= 6) {
+        _showNotification("SIX!", {
+            body: shortScore,
+            icon: "/static/images/6.png" 
+        });
+    } else if(scoreChange.runs >= 4) {
+        _showNotification("FOUR!", {
+            body: shortScore,
+            icon: "/static/images/4.jpg" 
+        });
+    }
+}
+
+/* END of Notification Handling
+===================================================================*/
+
+function main() {
+    setServiceWorkerRegistration();
+    setInterval(updateScore, 5000);
+}
+
+main()
