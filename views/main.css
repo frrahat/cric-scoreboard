@@ -7,9 +7,9 @@ div {
 .null { color: magenta; }
 .key { color: red; }
 
-.input-block {
+.header {
     position: relative;
-    background-color: red;
+    height: 50px;
 }
 
 .btn-match-select {
@@ -19,6 +19,10 @@ div {
     color: #000;
     cursor: pointer;
     outline: none;
+    font-size: 14px;
+    font-weight: 600;
+    float: left;
+    margin-right: 20px;
 }
 
 .btn-match-select:hover {
@@ -32,13 +36,18 @@ div {
     z-index: 1000;
     left: 0;
     top: 0;
+    max-height: 400px;
+    overflow: scroll;
     display: none;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
 }
 
 .match-list-item {
     padding: 10px;
     background-color: #fafafa;
     color: #000;
+    cursor: pointer;
 }
 
 .match-list-item:nth-child(odd) {
@@ -48,6 +57,10 @@ div {
 .match-list-item:hover {
     background-color: #080808;
     color: #fff;
+}
+
+.is-live-status {
+    float: left;
 }
 
 .led-red {
