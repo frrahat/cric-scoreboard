@@ -26,11 +26,6 @@
     display: inline-block;
 }
 
-.clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
-}
 
 .header {
     padding: 5px;
@@ -38,6 +33,12 @@
     min-height: 50px;
     margin-bottom: 20px;
 }
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 
 .btn-match-select {
     border-radius: 5px;
@@ -52,17 +53,16 @@
     margin-right: 20px;
     height: 47px;
 }
-
 .btn-match-select:hover {
     background-color: #000;
     color: #fff;
     border: #F00 1px solid;
 }
 
+
 .refresh-time-select {
     float: left;
 }
-
 .refresh-timer {
     float: left;
     border: #000 1px solid;
@@ -72,23 +72,19 @@
     background-color: white;
     color: black; 
 }
-
 .refresh-timer:hover {
     cursor: pointer;
     background-color: red;
     color: white;
 }
-
 .refresh-time-img {
     float: left;
     width: 25px;
 }
-
 .refresh-time-label {
     float: left;
     padding: 2px;
 }
-
 .refresh-time-list-modal {
     position: absolute;
     z-index: 500;
@@ -100,6 +96,7 @@
     box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
 }
 
+
 .noti-check {
     float: left;
     border: #000 1px solid;
@@ -107,12 +104,10 @@
     padding: 10px;
     margin-left: 20px;
 }
-
 .noti-image {
     float: left;
     width: 25px;
 }
-
 .noti-check-item {
     float: left;
     width: 20px;
@@ -124,17 +119,16 @@
     font-weight: 600;
     cursor: pointer;
 }
-
 .noti-check-item:hover {
     color: #fff;
     background-color: #000;
     border: red 2px solid;
 }
-
 .noti-check-item-selected {
     color: #fff !important;
     background-color: #00f !important;
 }
+
 
 .match-list-modal {
     position: absolute;
@@ -145,22 +139,20 @@
     border-radius: 5px;
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
 }
-
 .match-list-item {
     padding: 10px;
     background-color: #fafafa;
     color: #000;
     cursor: pointer;
 }
-
 .match-list-item:nth-child(odd) {
     background-color: #c5c5c5;
 }
-
 .match-list-item:hover {
     background-color: #080808;
     color: #fff;
 }
+
 
 .quick-refresh {
     float: left;
@@ -169,25 +161,23 @@
     padding: 10px;
     margin-left: 20px;
 }
-
 .quick-refresh-img {
     float: left;
     width: 25px;
 }
-
 .quick-refresh-clicked {
     background-color: blue !important;
 }
-
 .quick-refresh:hover {
+    cursor: pointer;
     background-color: plum;
 }
+
 
 .is-live-status {
     float: left;
     padding: 5px;
 }
-
 .led-red {
     margin: 0 auto;
     width: 24px;
@@ -196,7 +186,6 @@
     border-radius: 50%;
     box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
 }
-
 .led-green {
     margin: 0 auto;
     width: 24px;
@@ -206,7 +195,6 @@
     box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #0F0 0 2px 12px;
     animation: blinkGreen 1s infinite;
 }
-
 @keyframes blinkGreen {
     from { background-color: #0F0; }
     50% { background-color: #CF0; box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 0; }
