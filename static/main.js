@@ -241,6 +241,7 @@ function processForNotification(latest_score_data) {
             icon: "/static/images/W.png",
             vibrate: [200, 100, 200, 100, 200, 100, 200]
         });
+        new Audio("/static/beep-01a.wav").play();
     } else if(noti_checks["n6"] && scoreChange.runs >= 6) {
         _showNotification("SIX!", {
             body: shortScore,
