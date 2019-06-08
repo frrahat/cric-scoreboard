@@ -8,15 +8,21 @@
 </head>
 <body>
     <div class="header">
-        <button class="btn-match-select" id="btn-match-select">Select Match</button>
+        <div>
+            <button class="btn-match-select" id="btn-match-select">Select Match</button>
+            <div class="match-list-modal" id="match-list-modal"></div>
+        </div>
         <div class="is-live-status led-red" id="is-live-status"></div>
+        <div class="refresh-time-select" id="refresh-time-select">
+            <img class="refresh-time-img" src="/static/images/refresh-timer.png"/>
+            <span class="refresh-time-label">30s</span>
+        </div>
         <div class="noti-check" id="noti-check">
             <img class="noti-image" src="/static/images/noti-bell.png"/>
             <span class="noti-check-item noti-check-item-selected" id="noti-check-W">W</span>
             <span class="noti-check-item noti-check-item-selected" id="noti-check-6">6</span>
             <span class="noti-check-item noti-check-item-selected" id="noti-check-4">4</span>
         </div>
-        <div class="match-list-modal" id="match-list-modal"></div>
     </div>
     <div class="score-data" id="data"></div>
 </body>

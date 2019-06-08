@@ -39,12 +39,39 @@ div {
     font-weight: 600;
     float: left;
     margin-right: 20px;
+    height: 53px;
 }
 
 .btn-match-select:hover {
     background-color: #000;
     color: #fff;
     border: #F00 1px solid;
+}
+
+.refresh-time-select {
+    float: left;
+    border: #000 1px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-left: 30px;
+    background-color: white;
+    color: black; 
+}
+
+.refresh-time-select:hover {
+    cursor: pointer;
+    background-color: red;
+    color: white;
+}
+
+.refresh-time-img {
+    float: left;
+    width: 25px;
+}
+
+.refresh-time-label {
+    float: left;
+    padding: 2px;
 }
 
 .noti-check {
@@ -66,7 +93,7 @@ div {
     padding: 2px;
     text-align: center;
     border: #000 1px solid;
-    border-radius: 25px;
+    border-radius: 50%;
     margin-left: 5px;
     font-weight: 600;
     cursor: pointer;
@@ -75,6 +102,7 @@ div {
 .noti-check-item:hover {
     color: #fff;
     background-color: #000;
+    border: red 2px solid;
 }
 
 .noti-check-item-selected {
@@ -85,8 +113,6 @@ div {
 .match-list-modal {
     position: absolute;
     z-index: 1000;
-    left: 0;
-    top: 0;
     max-height: 400px;
     overflow: scroll;
     display: none;
