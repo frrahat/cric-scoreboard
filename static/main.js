@@ -133,7 +133,8 @@ function _getFormattedScoreOfInnings(innings) {
 function getFormattedScore(scoreData) {
     var returnString = "";
     returnString += `<div class="score-header">\
-                        <span class="key">Status</span> : <span class="string">${scoreData.status}</span>\
+                        <div><span class="match-status">Status</span> : <span class="string">${scoreData.status}</span></div>\
+                        <div><span class="match-status">State</span> : <span class="string">${scoreData.state}</span></div>\
                     </div>`;
     
     returnString += _getFormattedScoreOfInnings(scoreData.innings[0]);

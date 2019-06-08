@@ -12,10 +12,16 @@
 .runs { color: blue; }
 .null { color: purple; }
 .overs { color: magenta; }
-.key { color: red; }
+.key { color: red}
+.match-status {
+    color: red;
+    text-align: right;
+    min-width: 100px;
+    display: inline-block;
+}
 .team-name {
     color: green;
-    width: 150px;
+    min-width: 150px;
     text-align: right;
     display: inline-block;
 }
