@@ -8,14 +8,27 @@
 </head>
 <body>
     <div class="header">
-        <div>
+        <div class="container">
             <button class="btn-match-select" id="btn-match-select">Select Match</button>
             <div class="match-list-modal" id="match-list-modal"></div>
         </div>
         <div class="is-live-status led-red" id="is-live-status"></div>
-        <div class="refresh-time-select" id="refresh-time-select">
-            <img class="refresh-time-img" src="/static/images/refresh-timer.png"/>
-            <span class="refresh-time-label">30s</span>
+        <div class="refresh-time-select">
+            <div class="refresh-timer" id="refresh-timer">
+                <img class="refresh-time-img" src="/static/images/refresh-timer.png"/>
+                <span class="refresh-time-label" id="refresh-time-label">30s</span>
+            </div>
+            <div class="refresh-time-list-modal" id="refresh-time-list-modal">
+                <li class="match-list-item" id="rt-10">10s</li>
+                <li class="match-list-item" id="rt-15">15s</li>
+                <li class="match-list-item" id="rt-20">20s</li>
+                <li class="match-list-item" id="rt-25">25s</li>
+                <li class="match-list-item" id="rt-30">30s</li>
+                <li class="match-list-item" id="rt-40">40s</li>
+                <li class="match-list-item" id="rt-50">50s</li>
+                <li class="match-list-item" id="rt-60">60s</li>
+                <li class="match-list-item" id="rt-99">Stop</li>
+            </div>
         </div>
         <div class="noti-check" id="noti-check">
             <img class="noti-image" src="/static/images/noti-bell.png"/>

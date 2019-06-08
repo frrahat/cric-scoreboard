@@ -1,10 +1,6 @@
-div {
-    padding: 5px;
-}
-
 .score-data {
     font-size: 24px;
-    font-weight: 500px;
+    font-weight: 500;
 }
 .score-header {
     border-bottom: #000 1px dashed;
@@ -24,8 +20,10 @@ div {
 }
 
 .header {
+    padding: 5px;
     position: relative;
     height: 50px;
+    margin-bottom: 20px;
 }
 
 .btn-match-select {
@@ -50,6 +48,10 @@ div {
 
 .refresh-time-select {
     float: left;
+}
+
+.refresh-timer {
+    float: left;
     border: #000 1px solid;
     border-radius: 5px;
     padding: 10px;
@@ -58,7 +60,7 @@ div {
     color: black; 
 }
 
-.refresh-time-select:hover {
+.refresh-timer:hover {
     cursor: pointer;
     background-color: red;
     color: white;
@@ -72,6 +74,17 @@ div {
 .refresh-time-label {
     float: left;
     padding: 2px;
+}
+
+.refresh-time-list-modal {
+    position: absolute;
+    z-index: 500;
+    margin: 25px 0 0 50px;
+    max-height: 400px;
+    overflow: scroll;
+    display: none;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
 }
 
 .noti-check {
@@ -138,6 +151,7 @@ div {
 
 .is-live-status {
     float: left;
+    padding: 5px;
 }
 
 .led-red {

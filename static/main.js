@@ -3,6 +3,10 @@ var data_element = document.getElementById("data");
 var is_live_status_element = document.getElementById("is-live-status");
 var btn_match_select = document.getElementById("btn-match-select");
 var match_list_modal = document.getElementById("match-list-modal");
+var refresh_timer_element = document.getElementById("refresh-timer");
+var refresh_time_label = document.getElementById("refresh-time-label");
+var refresh_time_list_modal = document.getElementById("refresh-time-list-modal");
+var refresh_interval_in_sec = 30;
 var serviceWorkerRegistration = null;
 var prev_score_data = null;
 
@@ -40,13 +44,40 @@ match_list_modal.addEventListener("click", (e) => {
     }
 });
 
+refresh_timer_element.addEventListener("click", ()=> {
+    refresh_time_list_modal.setAttribute("style", "display: block");
+});
+
+refresh_time_list_modal.addEventListener("click", (e) => {
+    if(e.target.tagName === "LI") {
+        let target_id = e.target.id;
+        refresh_time_list_modal.setAttribute("style", "display: none");
+        
+        let new_interval_text = target_id.substr(target_id.length - 2);
+        refresh_interval_in_sec = parseInt(new_interval_text);
+
+        if(refresh_interval_in_sec == 99) {
+            refresh_interval_in_sec = 10000;
+            clearTimeout(updateScoreTimeout);
+            refresh_time_label.innerHTML = '&infin;';
+            console.log("refresh stopped");
+            return;
+        }
+        
+        console.log("new interval : ", refresh_interval_in_sec);
+        clearTimeout(updateScoreTimeout);
+        updateScore();
+        refresh_time_label.innerText = new_interval_text + "s";
+    }
+});
+
 noti_check_group_element.addEventListener("click", (e) => {
     if(e.target.tagName === "SPAN") {
         let target_id = e.target.id;
         let target_element = document.getElementById(target_id);
         for(let key in noti_checks) {
             if(noti_checks.hasOwnProperty(key)) {
-                if(target_id.endsWith(key.substr(key.length-1))) {
+                if(target_id.substr(target_id.length-1) === key.substr(key.length-1)) {
                     // console.log(target_id, "here");
                     if(noti_checks[key]) {
                         target_element.classList.remove("noti-check-item-selected");
@@ -145,7 +176,7 @@ function updateScore() {
         setLiveStatus(false);
     });
 
-    updateScoreTimeout = setTimeout(updateScore, 30000);
+    updateScoreTimeout = setTimeout(updateScore, refresh_interval_in_sec * 1000);
 }
 
 function setLiveStatus(new_is_live) {
