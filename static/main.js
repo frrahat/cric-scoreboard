@@ -239,7 +239,7 @@ function _getScoreChange(latest_score_data) {
     
     return {
         runs: latest[0].runs - prev[0].runs,
-        wickets: latest[0].wicket - prev[0].wicket
+        wickets: latest[0].wickets - prev[0].wickets
     }
 }
 
