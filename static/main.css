@@ -26,10 +26,16 @@
     display: inline-block;
 }
 
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 .header {
     padding: 5px;
     position: relative;
-    height: 50px;
+    min-height: 50px;
     margin-bottom: 20px;
 }
 
@@ -44,7 +50,7 @@
     font-weight: 600;
     float: left;
     margin-right: 20px;
-    height: 53px;
+    height: 47px;
 }
 
 .btn-match-select:hover {
@@ -62,7 +68,7 @@
     border: #000 1px solid;
     border-radius: 5px;
     padding: 10px;
-    margin-left: 30px;
+    margin-left: 20px;
     background-color: white;
     color: black; 
 }
@@ -99,7 +105,7 @@
     border: #000 1px solid;
     border-radius: 5px;
     padding: 10px;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 
 .noti-image {
@@ -161,7 +167,7 @@
     border: #000 1px solid;
     border-radius: 5px;
     padding: 10px;
-    margin-left: 30px;
+    margin-left: 20px;
 }
 
 .quick-refresh-img {
