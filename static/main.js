@@ -106,33 +106,24 @@ function setMatchId(match_id) {
     });
 }
 
-function getFormatted(jsonObject,level) {
-	var returnString = '';
-	for (var key in jsonObject) {
-		if (jsonObject.hasOwnProperty(key)) {
-			returnString += '<div style="padding-left: ' + (level * 10) + 'px;">';
-			returnString += '<span class="key">';
-			returnString += key;
-			returnString += '</span>';
-			
-			if (typeof jsonObject[key] == 'object') {
-				returnString += ' {' + getFormatted(jsonObject[key],level + 1) + '}';
-			}
-			else {
-				var type = 'number';
-				if (isNaN(jsonObject[key])) {
-					type = 'string';
-				}
-				
-				returnString += ': ';
-				returnString += '<span class="' + type + '">';
-				returnString += jsonObject[key];
-				returnString += '</span>';
-			}
-			returnString += '</div>';
-		}
-	}
-	return returnString;
+function _getFormattedScoreOfInnings(innings) {
+    if(!innings) return "";
+    return `<div class="score-row">\
+                <span class="team-name">${innings.team}</span> : \
+                <span class="runs">${innings.runs}</span>/\<span class="key">${innings.wickets}</span>\
+                <span class="overs">(${innings.overs})</span>\
+            </div>`
+}
+
+function getFormattedScore(scoreData) {
+    var returnString = "";
+    returnString += `<div class="score-header">\
+                        <span class="key">Status</span> : <span class="string">${scoreData.status}</span>\
+                    </div>`;
+    
+    returnString += _getFormattedScoreOfInnings(scoreData.innings[0]);
+    returnString += _getFormattedScoreOfInnings(scoreData.innings[1]);
+    return returnString;
 }
 
 function updateScore() {
@@ -141,7 +132,7 @@ function updateScore() {
         response.json().then(jsonData => {
             // console.log(jsonData);
             if (jsonData.success) {
-                data_element.innerHTML = getFormatted(jsonData.matchData, 2);
+                data_element.innerHTML = getFormattedScore(jsonData.matchData, 2);
                 setLiveStatus(true);
                 processForNotification(jsonData.matchData);
                 prev_score_data = jsonData.matchData;
@@ -201,10 +192,10 @@ function _showNotification(title, options) {
     }
 }
 
-function _getScoreInShort(latest_score_data) {
+function _getLatestInningsInShort(latest_score_data) {
     let latest_innings = latest_score_data.innings[0];
     if(!latest_innings) return "";
-    return `${latest_innings.team}: ${latest_innings.score}/${latest_innings.wicket} (${latest_innings.overs})`
+    return `${latest_innings.team}: ${latest_innings.runs}/${latest_innings.wickets} (${latest_innings.overs})`
 }
 
 function _getScoreChange(latest_score_data) {
@@ -216,14 +207,14 @@ function _getScoreChange(latest_score_data) {
     if(prev.length == 0 || prev.length != latest.length) return result;
     
     return {
-        runs: latest[0].score - prev[0].score,
+        runs: latest[0].runs - prev[0].runs,
         wickets: latest[0].wicket - prev[0].wicket
     }
 }
 
 function processForNotification(latest_score_data) {
     let scoreChange = _getScoreChange(latest_score_data);
-    let shortScore = _getScoreInShort(latest_score_data);
+    let shortScore = _getLatestInningsInShort(latest_score_data);
     // console.log(shortScore);
     // scoreChange = {runs: 6, wickets: 2};
     if(noti_checks["nW"] && scoreChange.wickets >= 1) {

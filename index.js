@@ -15,6 +15,7 @@ app.use('/static', express.static(__dirname + '/static'));
 
 app.get("/", (_, res) => {
   console.log("GET /");
+  MatchId = null;
   res.sendFile(path.join(__dirname,'views/index.html'));
 });
 
@@ -92,8 +93,8 @@ function getSanitizedScore(data) {
     result.matchData.innings.push({
       team: innings.bat_team_name,
       innings_id: innings.innings_id,
-      score: innings.score,
-      wicket: innings.wkts,
+      runs: innings.score,
+      wickets: innings.wkts,
       overs: innings.ovr
     });
   });

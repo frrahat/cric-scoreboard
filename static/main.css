@@ -1,11 +1,27 @@
 div {
     padding: 5px;
 }
+
+.score-data {
+    font-size: 24px;
+    font-weight: 500px;
+}
+.score-header {
+    border-bottom: #000 1px dashed;
+}
+.score-row {
+    padding: 10px;
+}
 .string { color: green; }
-.number { color: blue; }
-.boolean { color: purple; }
-.null { color: magenta; }
+.runs { color: blue; }
+.null { color: purple; }
+.overs { color: magenta; }
 .key { color: red; }
+.team-name {
+    color: green;
+    width: 500px;
+    text-align: right;
+}
 
 .header {
     position: relative;
