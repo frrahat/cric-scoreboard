@@ -15,8 +15,9 @@
 .key { color: red; }
 .team-name {
     color: green;
-    width: 500px;
+    width: 150px;
     text-align: right;
+    display: inline-block;
 }
 
 .header {
@@ -130,7 +131,7 @@
     overflow: scroll;
     display: none;
     border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 12px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
 }
 
 .match-list-item {

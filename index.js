@@ -8,14 +8,11 @@ const port = 8000;
 const live_matches_url = "http://mapps.cricbuzz.com/cbzios/match/livematches"
 const scorecard_url = "http://mapps.cricbuzz.com/cbzios/match/{match_id}/scorecard.json"
 
-var MatchId = null; 
-
 app.use('/views', express.static(__dirname + '/views'));
 app.use('/static', express.static(__dirname + '/static'));
 
 app.get("/", (_, res) => {
   console.log("GET /");
-  MatchId = null;
   res.sendFile(path.join(__dirname,'views/index.html'));
 });
 
@@ -27,26 +24,6 @@ app.get("/match-list", (_, res) => {
   }).catch(_res => {
     res.send(_res);
   });
-});
-
-app.get("/subscribe/:match_id", (req, res) => {
-  console.log("GET /subscribe/" + req.params.match_id);
-  MatchId = req.params.match_id;
-  res.send("");
-});
-
-app.get("/score-update", (_, res) => {
-  console.log("GET /score-update");
-  if (!MatchId) {
-    res.send({success: false});
-  } else {
-    _getResponse(`http://mapps.cricbuzz.com/cbzios/match/${MatchId}/scorecard.json`)
-    .then(data => {
-      res.send(getSanitizedScore(data));
-    }).catch(_res => {
-      res.send(_res);
-    });
-  }
 });
 
 app.get("/score-data/:match_id", (req, res) => {

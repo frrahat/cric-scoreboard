@@ -6,9 +6,10 @@ var match_list_modal = document.getElementById("match-list-modal");
 var refresh_timer_element = document.getElementById("refresh-timer");
 var refresh_time_label = document.getElementById("refresh-time-label");
 var refresh_time_list_modal = document.getElementById("refresh-time-list-modal");
-var refresh_interval_in_sec = 30;
+var refresh_interval_in_sec = 10;
 var serviceWorkerRegistration = null;
 var prev_score_data = null;
+var MatchId = null;
 
 var noti_check_group_element = document.getElementById("noti-check");
 var noti_checks = {
@@ -31,15 +32,10 @@ btn_match_select.addEventListener("click", () => {
 
 match_list_modal.addEventListener("click", (e) => {
     if(e.target.tagName === "LI") {
-        setMatchId(e.target.id)
-        .then(() => {
-            btn_match_select.innerText = e.target.innerText;
-            clearTimeout(updateScoreTimeout);
-            updateScore();
-        }).catch(() => {
-            btn_match_select.innerText = "Select Match";
-            alert("Failed to select match");
-        });
+        MatchId = e.target.id;
+        btn_match_select.innerText = e.target.innerText;
+        clearTimeout(updateScoreTimeout);
+        updateScore();
         hideMatchListModal();
     }
 });
@@ -125,18 +121,6 @@ function hideMatchListModal() {
     match_list_modal.setAttribute("style", "display: none");
 }
 
-function setMatchId(match_id) {
-    return new Promise((resolve, reject) => {
-        fetch('/subscribe/' + match_id)
-        .then(() => {
-            resolve();
-        }).catch(function() {
-            console.log('Server stopped');
-            reject();
-        });
-    });
-}
-
 function _getFormattedScoreOfInnings(innings) {
     if(!innings) return "";
     return `<div class="score-row">\
@@ -158,7 +142,9 @@ function getFormattedScore(scoreData) {
 }
 
 function updateScore() {
-    fetch('/score-update')
+    if(!MatchId) return;
+
+    fetch('/score-data/' + MatchId)
     .then(response => {
         response.json().then(jsonData => {
             // console.log(jsonData);
@@ -251,17 +237,18 @@ function processForNotification(latest_score_data) {
     if(noti_checks["nW"] && scoreChange.wickets >= 1) {
         _showNotification("Gone!", {
             body: shortScore,
-            icon: "/static/images/W.png" 
+            icon: "/static/images/W.png",
+            vibrate: [200, 100, 200, 100, 200, 100, 200]
         });
     } else if(noti_checks["n6"] && scoreChange.runs >= 6) {
         _showNotification("SIX!", {
             body: shortScore,
-            icon: "/static/images/6.png" 
+            icon: "/static/images/6.png"
         });
     } else if(noti_checks["n4"] && scoreChange.runs >= 4 && scoreChange.runs < 6) {
         _showNotification("FOUR!", {
             body: shortScore,
-            icon: "/static/images/4.jpg" 
+            icon: "/static/images/4.jpg"
         });
     }
 }
