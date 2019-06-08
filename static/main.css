@@ -156,6 +156,27 @@
     color: #fff;
 }
 
+.quick-refresh {
+    float: left;
+    border: #000 1px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-left: 30px;
+}
+
+.quick-refresh-img {
+    float: left;
+    width: 25px;
+}
+
+.quick-refresh-clicked {
+    background-color: blue !important;
+}
+
+.quick-refresh:hover {
+    background-color: plum;
+}
+
 .is-live-status {
     float: left;
     padding: 5px;

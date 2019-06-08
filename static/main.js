@@ -7,6 +7,8 @@ var refresh_timer_element = document.getElementById("refresh-timer");
 var refresh_time_label = document.getElementById("refresh-time-label");
 var refresh_time_list_modal = document.getElementById("refresh-time-list-modal");
 var refresh_interval_in_sec = 10;
+
+var btn_quick_refresh = document.getElementById("quick-refresh");
 var serviceWorkerRegistration = null;
 var prev_score_data = null;
 var MatchId = null;
@@ -88,6 +90,14 @@ noti_check_group_element.addEventListener("click", (e) => {
     }
 });
 
+btn_quick_refresh.addEventListener("click", () => {
+    btn_quick_refresh.classList.add("quick-refresh-clicked");
+    _updateScoreData();
+    setTimeout(() => {
+        btn_quick_refresh.classList.remove("quick-refresh-clicked");
+    }, 500);
+});
+
 function setMatchListModal() {
     return new Promise((resolve, reject) => {
         fetch('/match-list')
@@ -142,7 +152,7 @@ function getFormattedScore(scoreData) {
     return returnString;
 }
 
-function updateScore() {
+function _updateScoreData() {
     if(!MatchId) return;
 
     fetch('/score-data/' + MatchId)
@@ -162,7 +172,10 @@ function updateScore() {
         console.log('Server stopped');
         setLiveStatus(false);
     });
+}
 
+function updateScore() {
+    _updateScoreData();
     updateScoreTimeout = setTimeout(updateScore, refresh_interval_in_sec * 1000);
 }
 
