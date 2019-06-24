@@ -15,7 +15,7 @@ var MatchId = null;
 
 var noti_check_group_element = document.getElementById("noti-check");
 var noti_checks = {
-    nW: true, n6: true, n4:true
+    nW: true, n6: true, n4: true, nS: true
 }
 
 var updateScoreTimeout;
@@ -264,6 +264,10 @@ function processForNotification(latest_score_data) {
         _showNotification("FOUR!", {
             body: shortScore,
             icon: "/static/images/4.jpg"
+        });
+    } else if(noti_checks["nS"] && scoreChange.runs >= 1 && scoreChange.runs < 4) {
+        _showNotification(`${scoreChange.runs} Run(s) Added`, {
+            body: shortScore,
         });
     }
 }
